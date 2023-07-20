@@ -42,7 +42,7 @@ class Ant:
     def __init__(self, length, width, id, pos, num_moves):
         self.id = id # Identifier for ant
         self.pos = pos # Initializing ant position
-        self.moves = np.random.choice([-1, 1, length, -length], num_moves) # Generating a sequence of random moves for ant
+        # self.moves = np.random.choice([-1, 1, length, -length], num_moves) # Generating a sequence of random moves for ant
         self.food_eaten = 0
     
     def move(self, move):
@@ -56,6 +56,14 @@ class Ant:
             return
         else:
             self.pos += move # Updating ant position
+
+# Initialize random food positions, random starting positions for ants, and random moves for ants
+class RandomInitialization:
+    def __init__(self, length, width, num_ants, num_moves, num_simulations):
+        self.ant_starting_positions = np.random.choice(length*width, (num_simulations, num_ants)) # Initializing all random starting position for ants on all simulations
+        self.moves = np.random.choice([-1, 1, length, -length], (num_simulations, num_moves)) # Generating a sequence of random moves for ant
+        
+
 
 grid_tracking = False
 
@@ -71,6 +79,8 @@ simulation_runs = 1000
 
 sim_food_eaten = np.zeros(simulation_runs) # Array to track food eaten per simulation
 
+x = RandomInitialization(length, width, ants_total, time_steps, simulation_runs)
+
 # Iterate all simulations
 for run in range(simulation_runs):
     food_eaten = 0
@@ -78,11 +88,11 @@ for run in range(simulation_runs):
 
     ants = list()
     id = 1
-    ant_starting_positions = np.random.choice(length*width, ants_total) # Initializing all random starting position for ants
+    # ant_starting_positions = np.random.choice(length*width, ants_total) # Initializing all random starting position for ants
 
     # Initialize all ant objects
     for i in range(ants_total):
-        a = Ant(length, width, id, ant_starting_positions[i], time_steps)
+        a = Ant(length, width, id, x.ant_starting_positions[run, i], time_steps)
         ants.append(a)
 
         # Check if ant in food position, increment food eaten in World and ant object if so
@@ -94,7 +104,7 @@ for run in range(simulation_runs):
     # Iterate each time step for each ant
     for t in range(time_steps):
         for ant in ants:
-            ant.move(ant.moves[t]) # Make move from random move list sequence
+            ant.move(x.moves[run, t]) # Make move from random move list sequence
 
             # Check if ant in food position, increment food eaten in World and ant object if so
             if World.checkIfFoodPos(ant.pos):
