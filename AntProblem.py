@@ -1,8 +1,8 @@
-import time
-import sys
+# import time
+# import sys
 import numpy as np
-np.set_printoptions(threshold=sys.maxsize)
-start_time = time.time()
+# np.set_printoptions(threshold=sys.maxsize)
+# start_time = time.time()
 
 # Class to represent world grid
 class WorldGrid:
@@ -100,10 +100,8 @@ for run in range(simulation_runs):
             if World.checkIfFoodPos(ant.pos):
                 ant.food_eaten += 1
                 
-    sim_food_eaten[run] = World.food_eaten
-
-print(sim_food_eaten)
+    sim_food_eaten[run] = World.food_eaten # add food eaten in simulation
 
 print("Mean of Total Food Eaten:", np.mean(sim_food_eaten))
 print("Standard Deviation of Total Food Eaten:", np.std(sim_food_eaten))
-print(time.time()-start_time)
+# print(time.time()-start_time)
